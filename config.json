@@ -1,0 +1,48 @@
+{
+  "task": "ml",
+  "seed": 42,
+  "data": {
+    "train_path": "train.csv",
+    "test_path": "test.csv",
+    "target": "Survived",
+    "id_column": "PassengerId"
+  },
+  "features": {
+    "numeric": ["Age", "SibSp", "Parch", "Fare"],
+    "categorical": ["Pclass", "Sex", "Embarked"]
+  },
+  "validation": {"n_splits": 5},
+  "output_dir": "outputs",
+  "ml": {
+    "selected_models": ["lightgbm"],
+    "scale_numeric_for": ["logistic_regression", "knn"],
+    "models": {
+      "dummy": {"strategy": "most_frequent"},
+      "logistic_regression": {"C": 1.0, "max_iter": 1000},
+      "random_forest": {"n_estimators": 100, "max_depth": 5, "n_jobs": -1},
+      "decision_tree": {},
+      "knn": {"n_neighbors": 5, "weights": "uniform", "metric": "euclidean", "n_jobs": -1},
+      "gradient_boosting": {"n_estimators": 300, "learning_rate": 0.03, "max_depth": 3},
+      "catboost": {"iterations": 500, "learning_rate": 0.03, "depth": 4, "verbose": false, "allow_writing_files": false},
+      "xgboost": {"n_estimators": 300, "learning_rate": 0.03, "max_depth": 3, "eval_metric": "logloss", "tree_method": "hist", "n_jobs": -1},
+      "lightgbm": {"n_estimators": 300, "learning_rate": 0.03, "num_leaves": 8, "min_child_samples": 20, "verbosity": -1, "n_jobs": -1},
+      "voting": {"members": ["logistic_regression", "random_forest", "lightgbm"]},
+      "stacking": {"members": ["logistic_regression", "random_forest", "lightgbm"]}
+    }
+  },
+  "dl": {
+    "hidden_sizes": [32],
+    "activation": "relu",
+    "batchnorm": false,
+    "dropout": 0.0,
+    "optimizer": "sgd",
+    "learning_rate": 0.01,
+    "momentum": 0.9,
+    "weight_decay": 0.0,
+    "batch_size": 32,
+    "epochs": 100,
+    "scheduler": null,
+    "min_lr": 0.00001,
+    "num_threads": 1
+  }
+}
